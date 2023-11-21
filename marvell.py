@@ -22,10 +22,15 @@ If you don't know the answer, provide what you think the sql should be but do no
  
 As an example, a user will ask "Display Aggregated Amount for Each Quarter.?" The SQL to generate this would be:
  
- 
 SELECT QUARTER_NAME ,SUM(AMOUNT) AS SUM_AM 
 FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS
 GROUP BY QUARTER_NAME;
+
+As another example user will ask "Display me count of distinct products as per BU for SPG Division" The Sql for this would be:
+
+SELECT COUNT(*), BU ,DIVISION FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS  
+WHERE DIVISION  = 'SPG'
+GROUP BY ALL;
  
 Questions about Inventory Amount as per quarter should query FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS
 Questions about Yield Quantity & Yield Amount per quarter should query  FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS 
