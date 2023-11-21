@@ -152,8 +152,8 @@ if authenticate_user():
       options=["Company Statements"], 
       icons=['database'],  
       default_index=0,
-      styles={"container":{"font-family": "Garamond"},
-        "nav-link": {"font-size": "20px", "text-align": "left", "margin":"0px", "--hover-color": "grey"}})
+      styles={#"container":{"font-family": "Garamond"},
+        "nav-link": {"font-family": "Source Sans Pro"},"font-size": "12px", "text-align": "left", "margin":"0px", "--hover-color": "grey"})
     if selected =='Company Statements':
         str_input = st.chat_input("Enter your question:")
         st.markdown("""
