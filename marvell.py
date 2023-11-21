@@ -237,7 +237,7 @@ if authenticate_user():
                         
                     else:
                       with st.chat_message("assistant"):
-                        st.write("Please try to improve your question. Note this tab is for financial statement questions. Use Tab 2 to ask from Annual Reports .")
+                        st.write("Please try to improve your question.")
       
                 except:                   
                       #st.session_state.messages.append({"role": "assistant", "content": "The first attempt didn't pull what you were needing. Trying again..."})
@@ -246,5 +246,5 @@ if authenticate_user():
             except Exception as error:
               st.write(error)
               with st.chat_message("assistant"):
-                st.markdown("Please try to improve your question. Note this tab is for financial statement questions. Use Tab 2 to ask from Annual Reports .")
+                st.markdown("Please try to improve your question.")
                 #st.session_state.messages.append({"role": "assistant", "content": "Please try to improve your question. Note this tab is for financial statement questions. Use Tab 2 to ask from Annual Reports ."})
