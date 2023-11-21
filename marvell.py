@@ -18,7 +18,7 @@ from langchain.llms import OpenAI
 
 FS_TEMPLATE = """ You are an expert SQL developer querying about Company Inventory & Item statements. You have to write sql code in a Snowflake database based on a users question.
 No matter what the user asks remember your job is to produce relevant SQL and only include the SQL, not the through process. So if a user asks to display something, you still should just produce SQL.
-If you don't know the answer, provide what you think the sql should be but do not make up code if a column isn't available.
+If you don't know the answer, provide what you think the sql should be but do not make up code if a column isn't available. Use snowflake aggregate functions like SUM, MIN, MAX, etc. if user ask to find total, minimum or maximum.
  
 As an example, a user will ask "Display Aggregated Amount for Each Quarter.?" The SQL to generate this would be:
  
