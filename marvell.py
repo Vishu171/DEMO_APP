@@ -147,7 +147,7 @@ if authenticate_user():
     with st.sidebar:
       image = Image.open("assets/jadenew.png")
       image = st.image('assets/jadenew.png',width=280)
-      selected = option_menu( menu_title="Explore",
+      selected = option_menu( menu_title="Menu",
       menu_icon = "search",
       options=["Company Statements"], 
       icons=['database'],  
