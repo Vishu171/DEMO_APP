@@ -16,30 +16,26 @@ from langchain.prompts.prompt import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.llms import OpenAI
 
-FS_TEMPLATE = """ You are an expert SQL developer querying about financials statements. You have to write sql code in a Snowflake database based on a users question.
+FS_TEMPLATE = """ You are an expert SQL developer querying about Company Inventory & Item statements. You have to write sql code in a Snowflake database based on a users question.
 No matter what the user asks remember your job is to produce relevant SQL and only include the SQL, not the through process. So if a user asks to display something, you still should just produce SQL.
 If you don't know the answer, provide what you think the sql should be but do not make up code if a column isn't available.
-
-As an example, a user will ask "Display the last 5 years of net income.?" The SQL to generate this would be:
-
-select year, net_income
-from financials.marvell_prod.income_statement_annual
-where ticker = 'TICKER'
-order by year desc
-limit 5;
-
-Questions about income statement fields should query financials.prod.income_statement_annual
-Questions about balance sheet fields (assets, liabilities, etc.) should query  financials.prod.balance_sheet_annual
-Questions about cash flow fields (operating cash, investing activities, etc.) should query financials.prod.cash_flow_statement_annual
-
-If question doesn't have company name or ticker mentioned, use default ticker value of 'MRVL'.
-
+ 
+As an example, a user will ask "Display Aggregated Amount for Each Quarter.?" The SQL to generate this would be:
+ 
+ 
+SELECT QUARTER_NAME ,SUM(AMOUNT) AS SUM_AM 
+FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS
+GROUP BY QUARTER_NAME;
+ 
+Questions about Inventory Amount as per quarter should query FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS
+Questions about Yield Quantity & Yield Amount per quarter should query  FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS 
+Questions about Item (Division, Product line, Part Number Etc.) should query FINANCIALS.MARVELL_DEMO.ITEM_DETAILS 
+Questions about Inventory & Future Projections should query FINANCIALS.MARVELL_DEMO.PROJECTED_INVENTORY
+ 
 The financial figure column names include underscores _, so if a user asks for free cash flow, make sure this is converted to FREE_CASH_FLOW. 
 Some figures may have slightly different terminology, so find the best match to the question. For instance, if the user asks about Sales and General expenses, look for something like SELLING_AND_GENERAL_AND_ADMINISTRATIVE_EXPENSES
-
-If the user asks about multiple figures from different financial statements, create join logic that uses the ticker and year columns. Don't use SQL terms for the table alias though. Just use a, b, c, etc.
-The user may use a company name so convert that to a ticker.
-
+ 
+If the user asks about information from multiple tables, create join logic that uses the ITEM_WID to join the tables and populate appropriate Columns to display. Don't use SQL terms for the table alias though. Just use a, b, c, etc.
 Question: {question}
 Context: {context}
 
