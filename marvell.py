@@ -4,7 +4,6 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import altair as alt
-#import prompts
 from tabulate import tabulate
 from PIL import Image
 from streamlit_option_menu import option_menu
@@ -111,6 +110,7 @@ def plot_financials(df_2, x, y, x_cutoff, title):
 
 # adding this to test out caching
 st.cache_data(ttl=86400)
+
 def sf_query(str_input):
     """
     performs snowflake query with caching
