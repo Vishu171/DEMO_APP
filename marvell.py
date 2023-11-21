@@ -158,8 +158,11 @@ if authenticate_user():
       
           **Some Sample Questions:**
       
-          - What is the net income of Marvell in 2022?
-          - What is the gross profit in last 3 years?
+            1.	What was the total Ending Gross Inventory dollar amount at the end of last quarter?
+            2.	What is the projected inventory for all the parts in CCS BU per quarter?
+            3.	How many 5nm parts are available and in what BU?
+            4.	What is the Inventory on hand for 5nm parts in 2024-Q4 and what is the average yield quantity?
+
         
         
         """)
