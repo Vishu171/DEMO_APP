@@ -30,7 +30,7 @@ An another example user will ask "Display me count of distinct products as per B
 
 SELECT COUNT(*), BU ,DIVISION FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS  
 WHERE DIVISION  = 'SPG'
-GROUP BY ALL;
+GROUP BY BU ,DIVISION;
 
 User can also ask "Display Total Amount for BBA BU in each quarter"
 
