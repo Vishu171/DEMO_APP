@@ -158,10 +158,10 @@ if authenticate_user():
       
           **Some Sample Questions:**
       
-            -What was the total Ending Gross Inventory dollar amount at the end of last quarter?
-            -What is the projected inventory for all the parts in CCS BU per quarter?
-            -How many 5nm parts are available and in what BU?
-            -What is the Inventory on hand for 5nm parts in 2024-Q4 and what is the average yield quantity?
+          - What was the total Ending Gross Inventory dollar amount at the end of last quarter?
+          - What is the projected inventory for all the parts in CCS BU per quarter?
+          - How many 5nm parts are available and in what BU?
+          - What is the Inventory on hand for 5nm parts in 2024-Q4 and what is the average yield quantity?
 
         
         
