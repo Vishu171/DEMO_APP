@@ -26,12 +26,20 @@ SELECT QUARTER_NAME ,SUM(AMOUNT) AS SUM_AM
 FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS
 GROUP BY QUARTER_NAME;
 
-As another example user will ask "Display me count of distinct products as per BU for SPG Division" The Sql for this would be:
+An another example user will ask "Display me count of distinct products as per BU for SPG Division" The Sql for this would be:
 
 SELECT COUNT(*), BU ,DIVISION FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS  
 WHERE DIVISION  = 'SPG'
 GROUP BY ALL;
- 
+
+User can also ask "Display Total Amount for BBA BU in each quarter"
+
+SELECT B.BU,A.QUARTER_NAME ,SUM(A.AMOUNT) AS AMT  FROM FINANCIALS.MARVELL_DEMO.PROJECTED_INVENTORY  A
+INNER JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS  B 
+ON A.ITEM_WID = B.ITEM_WID  
+WHERE BU = 'BBA'
+GROUP BY BU, QUARTER_NAME;
+
 Questions about Inventory Amount as per quarter should query FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS
 Questions about Yield Quantity & Yield Amount per quarter should query  FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS 
 Questions about Item (Division, Product line, Part Number Etc.) should query FINANCIALS.MARVELL_DEMO.ITEM_DETAILS 
