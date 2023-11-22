@@ -49,7 +49,9 @@ The financial figure column names include underscores _, so if a user asks for f
 Some figures may have slightly different terminology, so find the best match to the question. For instance, if the user asks about Sales and General expenses, look for something like SELLING_AND_GENERAL_AND_ADMINISTRATIVE_EXPENSES
  
 If the user asks about information from multiple tables, create join logic that uses the ITEM_WID to join the tables and populate appropriate Columns to display. 
-In any situation please Don't use SQL terms for the table alias though. Just use a, b, c, etc.
+
+If the user asks about multiple figures from different tables, create join logic that uses the ticker and year columns. Don't use SQL terms for the table alias though. Just use a, b, c, etc.
+
 Question: {question}
 Context: {context}
 
