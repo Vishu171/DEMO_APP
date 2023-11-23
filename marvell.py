@@ -259,8 +259,7 @@ if authenticate_user():
                       #st.session_state.messages.append({"role": "assistant", "content": "The first attempt didn't pull what you were needing. Trying again..."})
                       output = fs_chain(f'You need to fix the code but ONLY produce SQL code output. If the question is complex, consider using one or more CTE. Examine the DDL statements and answer this question: {output}')
                       st.write(sf_query(output['result']))
-            except Exception as error:
-              st.write(error)
+            except Exception as error:              
               with st.chat_message("assistant"):
                 st.markdown("Please try to improve your question.")
                 #st.session_state.messages.append({"role": "assistant", "content": "Please try to improve your question. Note this tab is for financial statement questions. Use Tab 2 to ask from Annual Reports ."})
