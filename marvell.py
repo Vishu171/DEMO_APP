@@ -164,8 +164,8 @@ def authenticate_user():
 
 if authenticate_user():
     with st.sidebar:
-      image = Image.open("/content/drive/MyDrive/streamlit-buffett-main/assets/FinGPT.png")
-      image = st.image('/content/drive/MyDrive/streamlit-buffett-main/assets/FinGPT.png',width=280)
+      image = Image.open("assets/jadenew.png")
+      image = st.image('assets/jadenew.png',width=280)
       
     str_input = st.chat_input("Enter your question:")
     st.markdown("""
