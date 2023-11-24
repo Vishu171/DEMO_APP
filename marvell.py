@@ -67,7 +67,7 @@ llm = ChatOpenAI(
     model_name="gpt-3.5-turbo",
     temperature=0.1,
     max_tokens=1000,
-    openai_api_key="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"
+    openai_api_key= st.secrets["openai_key"]
 )
 
 prefix = few_shot_settings.get_prefix()
@@ -91,7 +91,7 @@ def fs_chain(question):
   embeddings = fewShot.get_embeddings()
   example_selector = fewShot.get_example_selector(embeddings)
   prompt_template = fewShot.get_prompt(question, example_selector, example_prompt)
-  docsearch = FAISS.load_local("/content/drive/MyDrive/streamlit-buffett-main/faiss_index", embeddings)
+  docsearch = FAISS.load_local("faiss_index", embeddings)
   qa_chain = RetrievalQA.from_chain_type(llm, retriever=docsearch.as_retriever(), chain_type_kwargs={"prompt": prompt_template})
   return qa_chain({"query": question})
 
