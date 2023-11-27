@@ -6,6 +6,8 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.vectorstores import FAISS
 from langchain.prompts.example_selector import SemanticSimilarityExampleSelector
+from ZeroShotAnalyzeSettings import zero_shot_analyze_settings
+from langchain.chains import RetrievalQA
 import openai
 from logging import exception
 import snowflake.connector
@@ -15,9 +17,7 @@ import streamlit as st
 import altair as alt
 from tabulate import tabulate
 from PIL import Image
-from streamlit_option_menu import option_menu
 from io import StringIO
-from langchain.chains import RetrievalQA
 from FewShotSettings import few_shot_settings
 
 
@@ -61,8 +61,23 @@ class few_shot_prompt_utility:
         )
         prompt = prompt_template.format(question=question, context="Inventory")
         return prompt_template
-		
+        
 
+class zero_shot_analyze_utility:
+
+    def __init__(self, question, ask, context, metadata):
+        self.question = question
+        self.ask = ask
+        self.context = context
+        self.metadata = metadata
+
+    def get_analyze_prompt(self):
+        template, variables = zero_shot_analyze_settings.get_prompt_template(self.ask, self.metadata)
+        prompt_template = PromptTemplate(template=template, input_variables=variables)
+        prompt_template.format(question=self.question, context=self.context)
+        return prompt_template
+        
+        
 llm = ChatOpenAI(
     model_name="gpt-3.5-turbo",
     temperature=0.1,
@@ -85,7 +100,7 @@ fewShot = few_shot_prompt_utility(examples=examples,
 
 def fs_chain(question):
   """
-    returns a question answer chain for faiss vectordb
+  returns a question answer chain for faiss vectordb
   """
   example_prompt = fewShot.get_prompt_template()
   embeddings = fewShot.get_embeddings()
@@ -94,13 +109,44 @@ def fs_chain(question):
   docsearch = FAISS.load_local("faiss_index", embeddings)
   qa_chain = RetrievalQA.from_chain_type(llm, retriever=docsearch.as_retriever(), chain_type_kwargs={"prompt": prompt_template})
   return qa_chain({"query": question})
+  
+def fs_analysis(dataframe,question):
+  """
+  returns a question answer chain for faiss vectordb
+  """
+  Question ='''Provide analysis of the data in tabular format below. \n '''
 
+  Question_prompt = '''The analysis must be within 80-100 words. 
+        Use "Ask" and "Metadata" information as supporting data for the analysis. This information is mentioned toward end of this text.
+        Keep analysis strictly for business users working in the inventory management domain to understand nature of output. Limit your response accordingly.
+        
+        '''
+  
+  analysis_question = dataframe + Question + Question_prompt
+  embeddings = fewShot.get_embeddings()
+  docsearch = FAISS.load_local("faiss_index", embeddings)
+  
+  docs = docsearch.similarity_search(question)
+  metadata = ""
+  for i in docs:
+    metadata = metadata + "\n" + i.page_content
+  
+  zeroShotAnlyze = zero_shot_analyze_utility(analysis_question, question, "inventory_management", metadata)
+  analyze_prompt = zeroShotAnlyze.get_analyze_prompt()
+  qa_chain1 = RetrievalQA.from_chain_type(llm,
+                                           retriever=docsearch.as_retriever(),
+                                           chain_type_kwargs={"prompt": analyze_prompt})
+
+  result = qa_chain1({"query": analysis_question})['result']
+ 
+  return result
+  
 st.set_page_config(layout="wide")
 
 username=st.secrets["streamlit_username"]
 password=st.secrets["streamlit_password"]
 column_list = ["AMOUNT"]
-cutoff = 20
+
 # establish snowpark connection
 conn = st.connection("snowpark")
 
@@ -109,24 +155,6 @@ try:
     query_test = conn.query('select 1')
 except:
     conn.reset()
-
-# adding this to test out caching
-st.cache_data(ttl=86400)
-
-def plot_financials(df_2, x, y, x_cutoff, title):
-    """"
-    helper to plot the altair financial charts
-    
-    return st.altair_chart(alt.Chart(df_2.head(x_cutoff)).mark_bar().encode(
-        x=x,
-        y=y
-        ).properties(title=title)
-    ) 
-    """
-    #df_subset = df_2.head(x_cutoff)
-    df = pd.DataFrame(df_2)
-
-    return st.bar_chart(data=df,x=df.columns[0], y=df.columns[1:], color=None,width=0, height=300, use_container_width=True)
 
 # adding this to test out caching
 st.cache_data(ttl=86400)
@@ -194,22 +222,11 @@ if authenticate_user():
                 continue
             csv = StringIO(df_str)
             df_data = pd.read_csv(csv, sep=',')
-            col1, col2 = st.columns(2)
             df_data.columns = df_data.columns.str.replace('_', ' ')
             headers = df_data.columns
-            
-            with col1:
-                st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-                if len(df_data.index) >2 & len(df_data.columns) == 2:
-                    title_name = df_data.columns[0]+'-'+df_data.columns[1]
-                    with col2:
-                            grph_ser_val_x1  = df_data.iloc[:,0]
-                            grph_ser_val_y1  = df_data.iloc[:,1].apply(lambda x : float(str(x).replace(',','')))
-                            frame = {df_data.columns[0] : grph_ser_val_x1,
-                                     df_data.columns[1] : grph_ser_val_y1}
-                            df_final1 = pd.DataFrame(frame)
-                            plot_financials(df_final1,df_data.columns[0],df_data.columns[1], cutoff,title_name)
-    
+            st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
+            #st.write(analysis)
+
     if prompt := str_input:
         st.chat_message("user").markdown(prompt, unsafe_allow_html = True)
         # Add user message to chat history
@@ -226,34 +243,28 @@ if authenticate_user():
                 if len(query_result) >= 1:
                   with st.chat_message("assistant"):
                     df_2 = pd.DataFrame(query_result)
+                    df_analysis = str(df_2.iloc[:, 1:])
+                    analysis = fs_analysis(df_analysis,str_input)
                     for name in df_2.columns:
                         if name in column_list:
                             new_name = f"{name} ($ thousands)"
                             df_2.rename(columns={name : new_name}, inplace=True)
                     
-                    col1, col2 = st.columns(2)
                     df_2.columns = df_2.columns.str.replace('_', ' ')
                     headers = df_2.columns
-                    with col1:
-                     st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-                    if len(df_2.index) >2 & len(df_2.columns) == 2:
-                        title_name = df_2.columns[0]+'-'+df_2.columns[1]
-                        with col2:
-                            grph_ser_val_x  = df_2.iloc[:,0]
-                            grph_ser_val_y  = df_2.iloc[:,1].apply(lambda x : float(str(x).replace(',','')))
-                            frame = {df_2.columns[0] : grph_ser_val_x,
-                                     df_2.columns[1] : grph_ser_val_y}
-                            df_final = pd.DataFrame(frame)
-                            plot_financials(df_final,df_2.columns[0],df_2.columns[1], cutoff,title_name)
+                    st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
+                    st.write(analysis)
                   st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False)})
-                    
+                  
                 else:
                   with st.chat_message("assistant"):
                     st.write("Data for the provided question is not available. Please try to improve your question.")
   
-            except:                   
+            except Exception as error:    
+                  st.write(error)               
                   output = fs_chain(f'You need to fix the code but ONLY produce SQL code output. If the question is complex, consider using one or more CTE. Examine the DDL statements and answer this question: {output}')
                   st.write(sf_query(output['result']))
-        except Exception as error:           		
+        except Exception as error:
+          st.write(error)               
           with st.chat_message("assistant"):
             st.markdown("Data for the provided question is not available. Please try to improve your question. ")
