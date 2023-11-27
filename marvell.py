@@ -204,7 +204,7 @@ if authenticate_user():
                     title_name = df_data.columns[0]+'-'+df_data.columns[1]
                     with col2:
                             grph_ser_val_x1  = df_data.iloc[:,0]
-                            grph_ser_val_y1  = df_data.iloc[:,1].apply(lambda x : float(x.replace(',','')))
+                            grph_ser_val_y1  = df_data.iloc[:,1].apply(lambda x : float(str(x).replace(',','')))
                             frame = {df_data.columns[0] : grph_ser_val_x1,
                                      df_data.columns[1] : grph_ser_val_y1}
                             df_final1 = pd.DataFrame(frame)
@@ -240,7 +240,7 @@ if authenticate_user():
                         title_name = df_2.columns[0]+'-'+df_2.columns[1]
                         with col2:
                             grph_ser_val_x  = df_2.iloc[:,0]
-                            grph_ser_val_y  = df_2.iloc[:,1].apply(lambda x : float(x.replace(',','')))
+                            grph_ser_val_y  = df_2.iloc[:,1].apply(lambda x : float(str(x).replace(',','')))
                             frame = {df_2.columns[0] : grph_ser_val_x,
                                      df_2.columns[1] : grph_ser_val_y}
                             df_final = pd.DataFrame(frame)
