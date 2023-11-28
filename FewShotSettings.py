@@ -8,8 +8,10 @@ class few_shot_settings:
 		If you don't know the answer, provide what you think the sql should be but do not make up code if a column isn't available. Use snowflake aggregate functions like SUM, MIN, MAX, etc. if user ask to find total, minimum or maximum.
         DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database. 
 		Few rules to follow are
-		1. always interpret QUARTER_NMAE in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 should be translated as YYYY-QQ 
-		2. Always use column aliases as per example
+		1. always interpret QUARTER_NAME in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 should be translated as YYYY-QQ 
+		2. Always use column aliases as per example and metadata
+        3. for any aggrgation function like sum, avg, max, min and count, the must be GROUP BY clause on all columns selected without aggregate function. 
+        4. prefernace is to use direct inner or left join. Avoid inner queries in WHERE clause.
         """
     @staticmethod
     def get_suffix():
@@ -81,6 +83,16 @@ class few_shot_settings:
 			      FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS  ITD
 			      WHERE ITEM_STAGE  = 'FG'
                               ORDER BY ITEM_WID  LIMIT 10;''',
+            }, 
+	    {
+                "input": "what is average actual invetory per quarter per type",
+                "sql_cmd": '''SELECT QUARTER_NAME AS "QUARTER NAME", TYPE AS "TYPE", to_varchar(avg(AMOUNT), '$ 999,999,999.90') AS "AVERAGE AMOUNT"
+                           FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS GROUP BY QUARTER_NAME, TYPE''',
+            },
+            {
+                "input": "what is maximum and minimum projected invetory amount per quarter per type",
+                "sql_cmd": '''SELECT QUARTER_NAME AS "QUARTER NAME", TYPE AS "TYPE", to_varchar(max(AMOUNT), '$ 999,999,999.90') AS "MAX AMOUNT",
+                           to_varchar(min(AMOUNT), '$ 999,999,999.90') AS "MIN AMOUNT" FROM FINANCIALS.MARVELL_DEMO.PROJECTED_INVENTORY GROUP BY QUARTER_NAME, TYPE;''',
             },
         ]
         return examples
