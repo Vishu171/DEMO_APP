@@ -217,11 +217,12 @@ if authenticate_user():
         with st.chat_message(message["role"]):
             role = message["role"]
             df_str = message["content"]
-            #st.write(df_str)
+            st.write(df_str)
             if role == "user":
                 st.markdown(message["content"], unsafe_allow_html = True)
                 continue
             csv = StringIO(df_str)
+            st.write(csv)
             df_data = pd.read_csv(csv, sep=',')
             df_data.columns = df_data.columns.str.replace('_', ' ')
             headers = df_data.columns
