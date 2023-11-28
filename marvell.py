@@ -217,6 +217,7 @@ if authenticate_user():
         with st.chat_message(message["role"]):
             role = message["role"]
             df_str = message["content"]
+            '''
             st.markdown(message["content"], unsafe_allow_html = True)
             if role =="assistant" and isinstance(message["content"], pd.DataFrame):
                 df_str = message["content"]
@@ -225,7 +226,7 @@ if authenticate_user():
                 df_data.columns = df_data.columns.str.replace('_', ' ')
                 headers = df_data.columns
                 st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True)
-            """
+            '''
             #st.write(df_str)
             if role == "user":
                 st.markdown(message["content"], unsafe_allow_html = True)
@@ -236,7 +237,7 @@ if authenticate_user():
             headers = df_data.columns
             st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
             #st.write(analysis)
-            """
+    
     if prompt := str_input:
         st.chat_message("user").markdown(prompt, unsafe_allow_html = True)
         # Add user message to chat history
@@ -266,7 +267,7 @@ if authenticate_user():
                     st.markdown(analysis)
                   data = df_2.to_csv(sep=',', index=False)
                   st.session_state.messages.append({"role": "assistant", "content": data})
-                  st.session_state.messages.append({"role": "assistant", "content": analysis})
+                  #st.session_state.messages.append({"role": "assistant", "content": analysis})
                   
                 else:
                   with st.chat_message("assistant"):
