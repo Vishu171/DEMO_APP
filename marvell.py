@@ -257,7 +257,7 @@ if authenticate_user():
                     st.markdown(analysis)
                   data = df_2.to_csv(sep=',', index=False)
                   st.session_state.messages.append({"role": "assistant", "content": data})
-                  #st.session_state.messages.append({"role": "assistant", "content": analysis})
+                  st.session_state.messages.append({"role": "assistant", "content": analysis})
                   
                 else:
                   with st.chat_message("assistant"):
