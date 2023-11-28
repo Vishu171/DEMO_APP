@@ -220,14 +220,18 @@ if authenticate_user():
             if role == "user":
                 st.markdown(df_str, unsafe_allow_html = True)
                 continue
-            csv_str = df_str[:df_str.index("<separator>")]
-            analysis_str = df_str[df_str.index("<separator>") + len("<separator>"):]
-            csv = StringIO(csv_str)
-            df_data = pd.read_csv(csv, sep=',')
-            df_data.columns = df_data.columns.str.replace('_', ' ')
-            headers = df_data.columns
-            st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-            st.markdown(analysis_str)
+            if df_str.find("<separator>") > -1:
+               csv_str = df_str[:df_str.index("<separator>")]
+               analysis_str = df_str[df_str.index("<separator>") + len("<separator>"):]
+               csv = StringIO(csv_str)
+               df_data = pd.read_csv(csv, sep=',')
+               df_data.columns = df_data.columns.str.replace('_', ' ')
+               headers = df_data.columns
+               st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
+               st.markdown(analysis_str)
+            else:
+                st.markdown(df_str)
+
             #st.write(analysis)
     
     if prompt := str_input:
