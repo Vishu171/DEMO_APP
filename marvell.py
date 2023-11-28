@@ -218,6 +218,13 @@ if authenticate_user():
             role = message["role"]
             df_str = message["content"]
             st.markdown(message["content"], unsafe_allow_html = True)
+            if role =="assistant" and message["content"] == data:
+                df_str = message["content"]
+                csv = StringIO(df_str)
+                df_data = pd.read_csv(csv, sep=',')
+                df_data.columns = df_data.columns.str.replace('_', ' ')
+                headers = df_data.columns
+                st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True)
             """
             #st.write(df_str)
             if role == "user":
@@ -257,8 +264,8 @@ if authenticate_user():
                     headers = df_2.columns
                     st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
                     st.markdown(analysis)
-                  #msg = df_2.to_csv(sep=',', index=False) + analysis
-                  st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False)})
+                  data = df_2.to_csv(sep=',', index=False)
+                  st.session_state.messages.append({"role": "assistant", "content": data})
                   st.session_state.messages.append({"role": "assistant", "content": analysis})
                   
                 else:
