@@ -75,6 +75,13 @@ class few_shot_settings:
                               ON A.ITEM_WID  = B.ITEM_WID WHERE B.QUARTER_NAME = '2024-Q3' AND A.ITEM_STAGE='FG' GROUP BY "ITEM STAGE", "QUARTER NAME", B.ITEM_WID, B.QUANTITY
                               ORDER BY "TOTAL QUANTITY" DESC LIMIT 10;''',
             },
+            {
+                "input": "Show me top 10 values of Item stage FG",
+                "sql_cmd": '''SELECT * 
+			      FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS  ITD
+			      WHERE ITEM_STAGE  = 'FG'
+                              ORDER BY ITEM_WID  LIMIT 10;''',
+            },
         ]
         return examples
  
