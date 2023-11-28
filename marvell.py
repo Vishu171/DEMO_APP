@@ -235,7 +235,7 @@ if authenticate_user():
         try:
             #st.write(str_input)
             output = fs_chain(str_input)
-            #st.write(output)
+            st.write(output)
             #st.write(output['result'])
             try:
                 # if the output doesn't work we will try one additional attempt to fix it
