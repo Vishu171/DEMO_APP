@@ -223,7 +223,6 @@ if authenticate_user():
                 continue
             csv = StringIO(df_str)
             df_data = pd.read_csv(csv, sep=',')
-            st.write(df_data)
             df_data.columns = df_data.columns.str.replace('_', ' ')
             headers = df_data.columns
             st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
@@ -261,7 +260,9 @@ if authenticate_user():
                   
                 else:
                   with st.chat_message("assistant"):
-                    st.write("Data for the provided question is not available. Please try to improve your question.")
+                    err_msg = "Data for the provided question is not available. Please try to improve your question."
+                    st.markdown(err_msg)
+                    st.session_state.messages.append({"role": "assistant", "content": err_msg})
   
             except Exception as error:    
                   #st.write(error)               
@@ -270,4 +271,6 @@ if authenticate_user():
         except Exception as error:
           #st.write(error)               
           with st.chat_message("assistant"):
-            st.markdown("Data for the provided question is not available. Please try to improve your question. ")
+            err_msg = "Data for the provided question is not available. Please try to improve your question."
+            st.markdown(err_msg)
+            st.session_state.messages.append({"role": "assistant", "content": err_msg})
