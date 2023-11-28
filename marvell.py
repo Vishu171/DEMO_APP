@@ -217,6 +217,8 @@ if authenticate_user():
         with st.chat_message(message["role"]):
             role = message["role"]
             df_str = message["content"]
+            st.markdown(message["content"], unsafe_allow_html = True)
+            """
             #st.write(df_str)
             if role == "user":
                 st.markdown(message["content"], unsafe_allow_html = True)
@@ -227,7 +229,7 @@ if authenticate_user():
             headers = df_data.columns
             st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
             #st.write(analysis)
-
+            """
     if prompt := str_input:
         st.chat_message("user").markdown(prompt, unsafe_allow_html = True)
         # Add user message to chat history
