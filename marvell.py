@@ -203,7 +203,7 @@ if authenticate_user():
       **Some Sample Questions:**
   
       - What was the total Ending Gross Inventory dollar amount at the end of last quarter?
-      - What is the projected inventory for all the parts in BBA BU per quarter?
+      - What is the total projected inventory for all the parts in BBA BU per quarter?
       - How many 5nm parts are available and in what BU?
       - What is the Inventory on hand for 5nm parts in 2024-Q4 and what is the average yield quantity?
     
@@ -225,7 +225,7 @@ if authenticate_user():
             df_data.columns = df_data.columns.str.replace('_', ' ')
             headers = df_data.columns
             st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-            st.write(analysis)
+            #st.write(analysis)
 
     if prompt := str_input:
         st.chat_message("user").markdown(prompt, unsafe_allow_html = True)
@@ -254,8 +254,8 @@ if authenticate_user():
                     headers = df_2.columns
                     st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
                     st.write(analysis)
-                  st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False)})
-                  st.session_state.messages.append({"role": "assistant", "content": analysis})
+                  st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False) + analysis })
+                  #st.session_state.messages.append({"role": "assistant", "content": analysis})
                   
                 else:
                   with st.chat_message("assistant"):
