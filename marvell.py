@@ -221,7 +221,7 @@ if authenticate_user():
                 st.markdown(df_str, unsafe_allow_html = True)
                 continue
             csv_str = df_str[:df_str.index("<separator>")]
-            analysis_str = df_str[st.index("<separator>") + len("<separator>"):]
+            analysis_str = df_str[df_str.index("<separator>") + len("<separator>"):]
             csv = StringIO(csv_str)
             df_data = pd.read_csv(csv, sep=',')
             df_data.columns = df_data.columns.str.replace('_', ' ')
