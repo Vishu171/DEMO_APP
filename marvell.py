@@ -114,15 +114,15 @@ def fs_analysis(dataframe,question):
   """
   returns a question answer chain for faiss vectordb
   """
-  Question ='''Provide analysis of the data in tabular format below. \n '''
+  analysis_question_part1 ='''Provide analysis of the data in tabular format below. \n '''
 
-  Question_prompt = '''The analysis must be within 80-100 words. 
+  analysis_question_prompt = '''\nThe analysis must be within 80-100 words. Do not include supplied data into analysis.
         Use "Ask" and "Metadata" information as supporting data for the analysis. This information is mentioned toward end of this text.
         Keep analysis strictly for business users working in the inventory management domain to understand nature of output. Limit your response accordingly.
         
         '''
   
-  analysis_question = dataframe + Question + Question_prompt
+  analysis_question = analysis_question_part1 + dataframe  + analysis_question_prompt
   embeddings = fewShot.get_embeddings()
   docsearch = FAISS.load_local("faiss_index", embeddings)
   
@@ -131,7 +131,7 @@ def fs_analysis(dataframe,question):
   for i in docs:
     metadata = metadata + "\n" + i.page_content
   
-  zeroShotAnlyze = zero_shot_analyze_utility(analysis_question, question, "inventory_management", metadata)
+  zeroShotAnlyze = zero_shot_analyze_utility(analysis_question, question, "inventory management", metadata)
   analyze_prompt = zeroShotAnlyze.get_analyze_prompt()
   qa_chain1 = RetrievalQA.from_chain_type(llm,
                                            retriever=docsearch.as_retriever(),
