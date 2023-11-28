@@ -119,7 +119,7 @@ def fs_analysis(dataframe,question):
   analysis_question_prompt = '''\nUse "Ask" and "Metadata" information as supporting data for the analysis. This information is mentioned toward end of this text.
         Keep analysis strictly for business users working in the inventory management domain to understand nature of output. Limit your response accordingly.
         Few Rules to follow are:
-        1. Always display the summary in the same font.
+        1. If the result for the query is in tabular format make sure the whole analysis is in same format.
         2. The analysis must be within 80-100 words. 
         3. Do not include supplied data into analysis.
         '''
