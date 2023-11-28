@@ -218,7 +218,7 @@ if authenticate_user():
             role = message["role"]
             df_str = message["content"]
             st.markdown(message["content"], unsafe_allow_html = True)
-            if role =="assistant" and message["content"] == data:
+            if role =="assistant" and isinstance(message["content"], pd.DataFrame):
                 df_str = message["content"]
                 csv = StringIO(df_str)
                 df_data = pd.read_csv(csv, sep=',')
