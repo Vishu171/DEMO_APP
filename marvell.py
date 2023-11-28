@@ -255,14 +255,14 @@ if authenticate_user():
                     headers = df_2.columns
                     st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
                     st.write(analysis)
-                  st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False) + analysis})
-                  #st.session_state.messages.append({"role": "assistant", "content": analysis})
+                  st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False)})
+                  st.session_state.messages.append({"role": "assistant", "content": analysis})
                   
                 else:
                   with st.chat_message("assistant"):
                     st.write("Data for the provided question is not available. Please try to improve your question.")
   
-            except:    
+            except Exception as error:    
                   st.write(error)               
                   output = fs_chain(f'You need to fix the code but ONLY produce SQL code output. If the question is complex, consider using one or more CTE. Examine the DDL statements and answer this question: {output}')
                   st.write(sf_query(output['result']))
