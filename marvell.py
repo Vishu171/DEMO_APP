@@ -217,17 +217,17 @@ if authenticate_user():
         with st.chat_message(message["role"]):
             role = message["role"]
             df_str = message["content"]
-            #st.write(df_str)
             if role == "user":
                 st.markdown(df_str, unsafe_allow_html = True)
-                st.write(df_str)
                 continue
-            st.write(df_str)
-            csv = StringIO(df_str)
+            csv_str = df_str[:df_str.index("<separator>")]
+            analysis_str = df_str[st.index("<separator>") + len("<separator>"):]
+            csv = StringIO(csv_str)
             df_data = pd.read_csv(csv, sep=',')
             df_data.columns = df_data.columns.str.replace('_', ' ')
             headers = df_data.columns
             st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
+            st.markdown(analysis_str)
             #st.write(analysis)
     
     if prompt := str_input:
@@ -257,9 +257,9 @@ if authenticate_user():
                     headers = df_2.columns
                     st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
                     st.markdown(analysis)
-                  data = df_2.to_csv(sep=',', index=False)
+                  data = df_2.to_csv(sep=',', index=False) + "<separator>" + analysis
                   st.session_state.messages.append({"role": "assistant", "content": data})
-                  st.session_state.messages.append({"role": "assistant", "content": analysis})
+                  #st.session_state.messages.append({"role": "assistant", "analysis": analysis})
                   
                 else:
                   with st.chat_message("assistant"):
