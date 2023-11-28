@@ -278,6 +278,6 @@ if authenticate_user():
         except Exception as error:
           #st.write(error)               
           with st.chat_message("assistant"):
-            err_msg = "Data for the provided question is not available. Please try to improve your question."
+            err_msg = "Data for the provided question is not available."
             st.markdown(err_msg)
             st.session_state.messages.append({"role": "assistant", "content": err_msg})
