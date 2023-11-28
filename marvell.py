@@ -217,16 +217,6 @@ if authenticate_user():
         with st.chat_message(message["role"]):
             role = message["role"]
             df_str = message["content"]
-            '''
-            st.markdown(message["content"], unsafe_allow_html = True)
-            if role =="assistant" and isinstance(message["content"], pd.DataFrame):
-                df_str = message["content"]
-                csv = StringIO(df_str)
-                df_data = pd.read_csv(csv, sep=',')
-                df_data.columns = df_data.columns.str.replace('_', ' ')
-                headers = df_data.columns
-                st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True)
-            '''
             #st.write(df_str)
             if role == "user":
                 st.markdown(message["content"], unsafe_allow_html = True)
