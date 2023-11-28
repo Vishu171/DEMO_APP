@@ -228,7 +228,7 @@ if authenticate_user():
             df_data.columns = df_data.columns.str.replace('_', ' ')
             headers = df_data.columns
             st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-            st.write(analysis)
+            #st.write(analysis)
     
     if prompt := str_input:
         st.chat_message("user").markdown(prompt, unsafe_allow_html = True)
