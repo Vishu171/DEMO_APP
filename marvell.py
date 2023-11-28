@@ -116,10 +116,12 @@ def fs_analysis(dataframe,question):
   """
   analysis_question_part1 ='''Provide analysis of the data in tabular format below. \n '''
 
-  analysis_question_prompt = '''\nThe analysis must be within 80-100 words. Do not include supplied data into analysis.
-        Use "Ask" and "Metadata" information as supporting data for the analysis. This information is mentioned toward end of this text.
+  analysis_question_prompt = '''\nUse "Ask" and "Metadata" information as supporting data for the analysis. This information is mentioned toward end of this text.
         Keep analysis strictly for business users working in the inventory management domain to understand nature of output. Limit your response accordingly.
-        Always display the summary in the same font.
+        Few Rules to follow are:
+        1. Always display the summary in the same font.
+        2. The analysis must be within 80-100 words. 
+        3. Do not include supplied data into analysis.
         '''
   
   analysis_question = analysis_question_part1 + dataframe  + analysis_question_prompt
