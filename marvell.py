@@ -278,7 +278,7 @@ if authenticate_user():
                   output = fs_chain(f'You need to fix the code but ONLY produce SQL code output. If the question is complex, consider using one or more CTE. Examine the DDL statements and answer this question: {output}')
                   st.write(sf_query(output['result']))
         except Exception as error:
-          #st.write(error)               
+          st.write(error)               
           with st.chat_message("assistant"):
             err_msg = "Data for the provided question is not available."
             st.markdown(err_msg)
