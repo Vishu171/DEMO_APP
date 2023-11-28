@@ -222,8 +222,8 @@ if authenticate_user():
                 st.markdown(message["content"], unsafe_allow_html = True)
                 continue
             csv = StringIO(df_str)
-            st.write(csv)
             df_data = pd.read_csv(csv, sep=',')
+            st.write(df_data)
             df_data.columns = df_data.columns.str.replace('_', ' ')
             headers = df_data.columns
             st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
