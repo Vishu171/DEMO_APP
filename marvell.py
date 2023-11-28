@@ -225,7 +225,7 @@ if authenticate_user():
             df_data.columns = df_data.columns.str.replace('_', ' ')
             headers = df_data.columns
             st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-            #st.write(analysis)
+            st.write(analysis)
 
     if prompt := str_input:
         st.chat_message("user").markdown(prompt, unsafe_allow_html = True)
@@ -243,7 +243,7 @@ if authenticate_user():
                 if len(query_result) >= 1:
                   with st.chat_message("assistant"):
                     df_2 = pd.DataFrame(query_result)
-                    df_analysis = str(df_2.iloc[:, 1:])
+                    df_analysis = str(df_2)
                     analysis = fs_analysis(df_analysis,str_input)
                     for name in df_2.columns:
                         if name in column_list:
@@ -255,6 +255,7 @@ if authenticate_user():
                     st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
                     st.write(analysis)
                   st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False)})
+                  st.session_state.messages.append({"role": "assistant", "content": analysis})
                   
                 else:
                   with st.chat_message("assistant"):
