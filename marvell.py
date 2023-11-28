@@ -254,8 +254,8 @@ if authenticate_user():
                     headers = df_2.columns
                     st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
                     st.write(analysis)
-                  st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False) + analysis })
-                  #st.session_state.messages.append({"role": "assistant", "content": analysis})
+                  st.session_state.messages.append({"role": "assistant", "content": df_2.to_csv(sep=',', index=False)})
+                  st.session_state.messages.append({"role": "assistant", "content": analysis})
                   
                 else:
                   with st.chat_message("assistant"):
