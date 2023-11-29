@@ -201,17 +201,9 @@ if authenticate_user():
       
     str_input = st.chat_input("Enter your question:")
     st.markdown("""
-    I am  Finance Assistant of your company. I possess the ability to extract information from your company's financial statements like balance sheet, income statements, etc spanning across 2003 to 2022. Please ask me questions and I will try my level best to provide accurate responses.
+    This is a demo to query inventory data from Snowflake from Marvell.Post your question in the text box given below. 
       
-  
-      **Some Sample Questions:**
-  
-      - What was the total Ending Gross Inventory dollar amount at the end of last quarter?
-      - What is the total projected inventory for all the parts in BBA BU per quarter?
-      - How many 5nm parts are available and in what BU?
-      - What is the Inventory on hand for 5nm parts in 2024-Q4 and what is the average yield quantity?
-    
-    
+        
     """)
     
     if "messages" not in st.session_state.keys():
