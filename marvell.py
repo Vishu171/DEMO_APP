@@ -201,7 +201,7 @@ if authenticate_user():
       
     str_input = st.chat_input("Enter your question:")
     st.markdown("""
-    ## This is a demo to query inventory data from Snowflake from Marvell.Post your question in the text box given below. 
+    # This is a demo to query inventory data from Snowflake from Marvell.Post your question in the text box given below. 
       
         
     """)
