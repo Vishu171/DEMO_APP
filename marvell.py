@@ -246,8 +246,8 @@ if authenticate_user():
                 if len(query_result) >= 1:
                   with st.chat_message("assistant"):
                     df_2 = pd.DataFrame(query_result)
-                    df_analysis = str(df_2)
-                    analysis = fs_analysis(df_analysis,str_input)
+                    #df_analysis = str(df_2)
+                    #analysis = fs_analysis(df_analysis,str_input)
                     for name in df_2.columns:
                         if name in column_list:
                             new_name = f"{name} ($ thousands)"
