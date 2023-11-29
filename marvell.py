@@ -197,7 +197,7 @@ if authenticate_user():
       image = Image.open("assets/jadeglobal.png")
       image = st.image('assets/jadeglobal.png',width=280)
       st.markdown(""" ### SCM Inventory Management 
-                      ###GenAI Assistant """)
+                      ### GenAI Assistant """)
       
       
     str_input = st.chat_input("Enter your question:")
