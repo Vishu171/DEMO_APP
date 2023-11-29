@@ -196,12 +196,14 @@ if authenticate_user():
     with st.sidebar:
       image = Image.open("assets/jadeglobal.png")
       image = st.image('assets/jadeglobal.png',width=280)
-      st.markdown(""" ### SCM Inventory Management GenAI Assistant """)
+      st.markdown(""" ### SCM Inventory Management 
+                      ###GenAI Assistant """)
       
       
     str_input = st.chat_input("Enter your question:")
     st.markdown("""
-    #### This is a demo to query inventory data from Snowflake from Marvell.Post your question in the text box given below. 
+    #### This is a demo to query inventory data from Snowflake for Marvell.
+    #### Post your question in the text box below. 
       
         
     """)
