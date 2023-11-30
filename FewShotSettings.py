@@ -11,14 +11,12 @@ class few_shot_settings:
 		Few rules to follow are
 		1. always interpret QUARTER_NAME in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 or Q1 of financial year 22 should be translated as YYYY-QQ 
 		2. You must interpret next quarter, previous quarter, next year first quarter etc keeping below rule into consideraiton: 
-           a. current year would alwasy be YEAR(CURRENT_DATE())+1 for MONTH((CURRENT_DATE()) IN (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) 
-              and YEAR(CURRENT_DATE()) for MONTH((CURRENT_DATE()) IN (1))
-           b. Rule to determine quarter would be as per below
-                        Q1 would be for MONTH(CURRENT_DATE()) IN (2, 3, 4)
-                        Q2 would be for MONTH(CURRENT_DATE()) IN (5, 6, 7)
-                        Q3 would be for MONTH(CURRENT_DATE()) IN (8, 9, 10)
-                        Q4 would be for MONTH(CURRENT_DATE()) IN (11, 12, 1)
-            
+           a. Rule to determine quarter would be as per below
+                for MONTH(CURRENT_DATE()) IN (2, 3, 4) quarter would be Q1 and year would be YEAR(CURRENT_DATE())+1
+                for MONTH(CURRENT_DATE()) IN (5, 6, 7) quarter would be Q2 and year would be YEAR(CURRENT_DATE())+1
+                for MONTH(CURRENT_DATE()) IN (8, 9, 10) quarter would be Q3 and year would be YEAR(CURRENT_DATE())+1
+                for MONTH(CURRENT_DATE()) IN (11, 12) quarter would be Q4 and year would be YEAR(CURRENT_DATE())+1
+                for MONTH(CURRENT_DATE()) IN (1) quarter would be Q4 and year would be YEAR(CURRENT_DATE())
            Always calculate value of QUARTER_NAME by using above 2 rules and concatinating to bring in format  'YYYY-QQ'. 
            Striclty do not use inner query for such questions from user. Refer example containing next quarter the QUARTER_NAME is calculated as per Current_date year is 2023 and month is Nov or 11
         3. Always use column aliases as per example and metadata
@@ -57,9 +55,9 @@ class few_shot_settings:
             {
                 "input": "For a Particular BU , For Eg : CDSP Whats the actual vs Inhand vs Projected total amount for 5nm 'Tech Group' or 'technology group' in Year 2024 and Quarter Q3",
                 "sql_cmd": '''SELECT B.QUARTER_NAME AS "QUARTER NAME", A.BU AS "BU", A.TECHNOLOGY_GROUP AS "TECHNOLOGY GROUP", to_varchar(SUM(B.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL ACTUAL AMT",
-                              to_varchar(SUM(INONHAND.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL ON-HAND AMT", to_varchar(SUM(PROJINV.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL PROJECTED AMT" FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS A
+                              to_varchar(SUM(C.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL ON-HAND AMT", to_varchar(SUM(PROJINV.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL PROJECTED AMT" FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS A
                               LEFT JOIN FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS  B ON A.ITEM_WID  = B.ITEM_WID 
-                              LEFT JOIN FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS INONHAND ON A.ITEM_WID  = INONHAND.ITEM_WID 
+                              LEFT JOIN FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS C ON A.ITEM_WID  = C.ITEM_WID 
                               LEFT JOIN FINANCIALS.MARVELL_DEMO.PROJECTED_INVENTORY PROJINV ON A.ITEM_WID  = PROJINV.ITEM_WID 
                               WHERE A.TECHNOLOGY_GROUP  = '5nm' AND A.BU = 'CDSP' AND  B.QUARTER_NAME  = '2024-Q3' GROUP BY ALL;''',
             },
