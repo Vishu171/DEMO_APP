@@ -144,7 +144,7 @@ def fs_analysis(dataframe,question):
   return result
 
 def output_operation(query_result,str_input):
-	if len(query_result) >= 1:
+     if len(query_result) >= 1:
         with st.chat_message("assistant"):
             df_2 = pd.DataFrame(query_result)
             df_analysis = str(df_2)
