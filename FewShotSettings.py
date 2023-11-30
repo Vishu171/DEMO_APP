@@ -1,4 +1,5 @@
 class few_shot_settings:
+    
     @staticmethod
     def get_prefix():
         return f"""
@@ -8,19 +9,32 @@ class few_shot_settings:
 		If you don't know the answer, provide what you think the sql should be but do not make up code if a column isn't available. Use snowflake aggregate functions like SUM, MIN, MAX, etc. if user ask to find total, minimum or maximum.
         DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database. 
 		Few rules to follow are
-		1. always interpret QUARTER_NAME in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 should be translated as YYYY-QQ 
-		2. Always use column aliases as per example and metadata
-        3. for any aggrgation function like sum, avg, max, min and count, the must be GROUP BY clause on all columns selected without aggregate function. 
-        4. prefernace is to use direct inner or left join. Avoid inner queries in WHERE clause.
+		1. always interpret QUARTER_NAME in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 or Q1 of financial year 22 should be translated as YYYY-QQ 
+		2. You must interpret next quarter, previous quarter, next year first quarter etc keeping below rule into consideraiton: 
+           a. current year would alwasy be YEAR(CURRENT_DATE())+1 for MONTH((CURRENT_DATE()) IN (2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12)) 
+              and YEAR(CURRENT_DATE()) for MONTH((CURRENT_DATE()) IN (1))
+           b. Rule to determine quarter would be as per below
+                        Q1 would be for MONTH(CURRENT_DATE()) IN (2, 3, 4)
+                        Q2 would be for MONTH(CURRENT_DATE()) IN (5, 6, 7)
+                        Q3 would be for MONTH(CURRENT_DATE()) IN (8, 9, 10)
+                        Q4 would be for MONTH(CURRENT_DATE()) IN (11, 12, 1)
+            
+           Always calculate value of QUARTER_NAME by using above 2 rules and concatinating to bring in format  'YYYY-QQ'. 
+           Striclty do not use inner query for such questions from user. Refer example containing next quarter the QUARTER_NAME is calculated as per Current_date year is 2023 and month is Nov or 11
+        3. Always use column aliases as per example and metadata
+        4. for any aggrgation function like sum, avg, max, min and count, the must be GROUP BY clause on all columns selected without aggregate function. 
+        5. prefernace is to use direct inner or left join. Avoid inner queries in WHERE clause.
         """
+    
     @staticmethod
     def get_suffix():
         return """Question: {question}
         Context: {context}
- 
+
         SQL_cmd: ```sql ``` \n
- 
+
         """, ["question", "context"]
+    
     @staticmethod
     def get_examples():
         examples = [
@@ -84,7 +98,7 @@ class few_shot_settings:
 			      WHERE ITEM_STAGE  = 'FG'
                               ORDER BY ITEM_WID  LIMIT 10;''',
             }, 
-	    {
+            {
                 "input": "what is average actual invetory per quarter per type",
                 "sql_cmd": '''SELECT QUARTER_NAME AS "QUARTER NAME", TYPE AS "TYPE", to_varchar(avg(AMOUNT), '$ 999,999,999.90') AS "AVERAGE AMOUNT"
                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS GROUP BY QUARTER_NAME, TYPE''',
@@ -94,9 +108,23 @@ class few_shot_settings:
                 "sql_cmd": '''SELECT QUARTER_NAME AS "QUARTER NAME", TYPE AS "TYPE", to_varchar(max(AMOUNT), '$ 999,999,999.90') AS "MAX AMOUNT",
                            to_varchar(min(AMOUNT), '$ 999,999,999.90') AS "MIN AMOUNT" FROM FINANCIALS.MARVELL_DEMO.PROJECTED_INVENTORY GROUP BY QUARTER_NAME, TYPE;''',
             },
+            {
+                "input": "what is inventory on hand for next 2 quarters for the business unit Switch.",
+                "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
+                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME IN ('2025-Q1','2025-Q2');''',
+            },
+            {
+                "input": "what is inventory on hand for previous 2 quarters for the business unit Switch.",
+                "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
+                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME IN ('2024-Q3','2024-Q2');''',
+            },            {
+                "input": "what is inventory on hand for current quarter for the business unit Switch.",
+                "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
+                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME = '2024-Q4';''',
+            },
         ]
         return examples
- 
+
     @staticmethod
     def get_example_template():
         template = """
