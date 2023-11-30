@@ -270,6 +270,7 @@ if authenticate_user():
                   st.write("inner exception")
                   output = fs_chain(f'You need to fix the code but ONLY produce SQL code output. If the question is complex, consider using one or more CTE. Examine the DDL statements and answer this question: {output}')
                   #st.write(sf_query(output['result']))
+                  query_result = sf_query(output['result'])
                   output_operation(query_result,str_input)
         except Exception as error:
           st.write(error) 
