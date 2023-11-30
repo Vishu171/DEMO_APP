@@ -227,7 +227,7 @@ if authenticate_user():
                df_data.columns = df_data.columns.str.replace('_', ' ')
                headers = df_data.columns
                st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-               #st.markdown(analysis_str)
+               st.markdown(analysis_str)
             else:
                 st.markdown(df_str)
 
@@ -259,7 +259,7 @@ if authenticate_user():
                     df_2.columns = df_2.columns.str.replace('_', ' ')
                     headers = df_2.columns
                     st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-                    #st.markdown(analysis)
+                    st.markdown(analysis)
                   data = df_2.to_csv(sep=',', index=False) + "<separator>" + analysis
                   st.session_state.messages.append({"role": "assistant", "content": data})
                   #st.session_state.messages.append({"role": "assistant", "analysis": analysis})
