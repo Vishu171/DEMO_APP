@@ -55,7 +55,7 @@ class few_shot_settings:
                 "sql_cmd": '''SELECT A.ITEM_WID AS "ITEM WID", to_varchar(A.AMOUNT, '$ 9,999,999,999.90') AS "AMOUNT" FROM FINANCIALS.MARVELL_DEMO.PROJECTED_INVENTORY A INNER JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON A.ITEM_WID = B.ITEM_WID WHERE B.BU = \'BBA\' AND A.QUARTER_NAME = \'2021-Q4\';''',
             },
             {
-                "input": "For a Particular BU , For Eg : CDSP Whats the actual vs Inhand vs Projected total amount for 5nm Tech Group in Year 2024 and Quarter Q3",
+                "input": "For a Particular BU , For Eg : CDSP Whats the actual vs Inhand vs Projected total amount for 5nm 'Tech Group' or 'technology group' in Year 2024 and Quarter Q3",
                 "sql_cmd": '''SELECT B.QUARTER_NAME AS "QUARTER NAME", A.BU AS "BU", A.TECHNOLOGY_GROUP AS "TECHNOLOGY GROUP", to_varchar(SUM(B.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL ACTUAL AMT",
                               to_varchar(SUM(INONHAND.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL ON-HAND AMT", to_varchar(SUM(PROJINV.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL PROJECTED AMT" FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS A
                               LEFT JOIN FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS  B ON A.ITEM_WID  = B.ITEM_WID 
