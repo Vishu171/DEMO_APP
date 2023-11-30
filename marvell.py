@@ -142,7 +142,19 @@ def fs_analysis(dataframe,question):
   result = qa_chain1({"query": analysis_question})['result']
  
   return result
-  
+
+def output_operation(query_result,str_input):
+	if len(query_result) >= 1:
+        with st.chat_message("assistant"):
+            df_2 = pd.DataFrame(query_result)
+            df_analysis = str(df_2)
+            analysis = fs_analysis(df_analysis,str_input)                    
+            headers = df_2.columns
+            st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
+            st.markdown(analysis)
+        data = df_2.to_csv(sep=',', index=False) + "<separator>" + analysis
+        st.session_state.messages.append({"role": "assistant", "content": data})
+    
 st.set_page_config(layout="wide")
 
 username=st.secrets["streamlit_username"]
@@ -246,16 +258,7 @@ if authenticate_user():
             try:
                 # if the output doesn't work we will try one additional attempt to fix it
                 query_result = sf_query(output['result'])
-                if len(query_result) >= 1:
-                  with st.chat_message("assistant"):
-                    df_2 = pd.DataFrame(query_result)
-                    df_analysis = str(df_2)
-                    analysis = fs_analysis(df_analysis,str_input)                    
-                    headers = df_2.columns
-                    st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-                    st.markdown(analysis)
-                  data = df_2.to_csv(sep=',', index=False) + "<separator>" + analysis
-                  st.session_state.messages.append({"role": "assistant", "content": data})
+                output_operation(query_result,str_input)
 
                 else:
                   with st.chat_message("assistant"):
@@ -267,7 +270,8 @@ if authenticate_user():
                   st.write(error)
                   st.write("inner exception")
                   output = fs_chain(f'You need to fix the code but ONLY produce SQL code output. If the question is complex, consider using one or more CTE. Examine the DDL statements and answer this question: {output}')
-                  st.write(sf_query(output['result']))
+                  #st.write(sf_query(output['result']))
+                  output_operation(query_result,str_input)
         except Exception as error:
           st.write(error) 
           st.write("outer exception")
