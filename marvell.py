@@ -144,7 +144,7 @@ def fs_analysis(dataframe,question):
   return result
 
 def output_operation(query_result,str_input):
-     if len(query_result) >= 1:
+    if len(query_result) >= 1:
         with st.chat_message("assistant"):
             df_2 = pd.DataFrame(query_result)
             df_analysis = str(df_2)
@@ -154,6 +154,11 @@ def output_operation(query_result,str_input):
             st.markdown(analysis)
         data = df_2.to_csv(sep=',', index=False) + "<separator>" + analysis
         st.session_state.messages.append({"role": "assistant", "content": data})
+    else:
+        with st.chat_message("assistant"):
+            err_msg = "Data for the provided question is not available. Please try to improve your question."
+            st.markdown(err_msg)
+            st.session_state.messages.append({"role": "assistant", "content": err_msg})
     
 st.set_page_config(layout="wide")
 
@@ -259,12 +264,6 @@ if authenticate_user():
                 # if the output doesn't work we will try one additional attempt to fix it
                 query_result = sf_query(output['result'])
                 output_operation(query_result,str_input)
-
-                else:
-                  with st.chat_message("assistant"):
-                    err_msg = "Data for the provided question is not available. Please try to improve your question."
-                    st.markdown(err_msg)
-                    st.session_state.messages.append({"role": "assistant", "content": err_msg})
   
             except Exception as error:    
                   st.write(error)
