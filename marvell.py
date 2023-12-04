@@ -106,7 +106,7 @@ def fs_chain(question):
   embeddings = fewShot.get_embeddings()
   example_selector = fewShot.get_example_selector(embeddings)
   prompt_template = fewShot.get_prompt(question, example_selector, example_prompt)
-  docsearch = FAISS.load_local("/content/drive/MyDrive/streamlit-buffett-main/faiss_index", embeddings)
+  docsearch = FAISS.load_local("faiss_index", embeddings)
   qa_chain = RetrievalQA.from_chain_type(llm, retriever=docsearch.as_retriever(), chain_type_kwargs={"prompt": prompt_template})
   return qa_chain({"query": question})
   
@@ -126,7 +126,7 @@ def fs_analysis(dataframe,question):
   
   analysis_question = analysis_question_part1 + dataframe  + analysis_question_prompt
   embeddings = fewShot.get_embeddings()
-  docsearch = FAISS.load_local("/content/drive/MyDrive/streamlit-buffett-main/faiss_index", embeddings)
+  docsearch = FAISS.load_local("faiss_index", embeddings)
   
   docs = docsearch.similarity_search(question)
   metadata = ""
