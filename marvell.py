@@ -215,8 +215,8 @@ def authenticate_user():
 
 if authenticate_user():
     with st.sidebar:
-      image = Image.open("/content/drive/MyDrive/streamlit-buffett-main/assets/FinGPT.png")
-      image = st.image('/content/drive/MyDrive/streamlit-buffett-main/assets/FinGPT.png',width=280)
+      image = Image.open("assets/jadeglobal.png")
+      image = st.image('assets/jadeglobal.png',width=280)
       #st.markdown(""" ### SCM Inventory Management """)
       st.markdown("<h3 style='text-align: center;'>SCM Inventory Management</h3>", unsafe_allow_html=True)
       st.markdown("<h3 style='text-align: center;'>GenAI Assistant</h3>", unsafe_allow_html=True)
