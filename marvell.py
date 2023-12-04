@@ -106,7 +106,7 @@ def fs_chain(question):
   embeddings = fewShot.get_embeddings()
   example_selector = fewShot.get_example_selector(embeddings)
   prompt_template = fewShot.get_prompt(question, example_selector, example_prompt)
-  docsearch = FAISS.load_local("faiss_index", embeddings)
+  docsearch = FAISS.load_local("/content/drive/MyDrive/streamlit-buffett-main/faiss_index", embeddings)
   qa_chain = RetrievalQA.from_chain_type(llm, retriever=docsearch.as_retriever(), chain_type_kwargs={"prompt": prompt_template})
   return qa_chain({"query": question})
   
@@ -126,7 +126,7 @@ def fs_analysis(dataframe,question):
   
   analysis_question = analysis_question_part1 + dataframe  + analysis_question_prompt
   embeddings = fewShot.get_embeddings()
-  docsearch = FAISS.load_local("faiss_index", embeddings)
+  docsearch = FAISS.load_local("/content/drive/MyDrive/streamlit-buffett-main/faiss_index", embeddings)
   
   docs = docsearch.similarity_search(question)
   metadata = ""
@@ -150,8 +150,12 @@ def output_operation(query_result,str_input):
             df_analysis = str(df_2)
             analysis = fs_analysis(df_analysis,str_input)                    
             headers = df_2.columns
+            st.markdown(f'<p style="font-family:sans-serif; font-size:15px">{analysis}</p>', unsafe_allow_html=True)
             st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-            st.markdown(analysis)
+            #st.markdown(analysis)
+            st.text("")
+            with st.expander("The SQL query used for above question is:"):
+              st.write(output['result'])
         data = df_2.to_csv(sep=',', index=False) + "<separator>" + analysis
         st.session_state.messages.append({"role": "assistant", "content": data})
     else:
@@ -211,8 +215,8 @@ def authenticate_user():
 
 if authenticate_user():
     with st.sidebar:
-      image = Image.open("assets/jadeglobal.png")
-      image = st.image('assets/jadeglobal.png',width=280)
+      image = Image.open("/content/drive/MyDrive/streamlit-buffett-main/assets/FinGPT.png")
+      image = st.image('/content/drive/MyDrive/streamlit-buffett-main/assets/FinGPT.png',width=280)
       #st.markdown(""" ### SCM Inventory Management """)
       st.markdown("<h3 style='text-align: center;'>SCM Inventory Management</h3>", unsafe_allow_html=True)
       st.markdown("<h3 style='text-align: center;'>GenAI Assistant</h3>", unsafe_allow_html=True)
@@ -222,8 +226,7 @@ if authenticate_user():
     st.markdown("""
     #### This is a demo to query inventory data from Snowflake for Marvell.
     #### Post your question in the text box below. 
-      
-        
+              
     """)
     
     if "messages" not in st.session_state.keys():
@@ -243,8 +246,9 @@ if authenticate_user():
                df_data = pd.read_csv(csv, sep=',')
                df_data.columns = df_data.columns.str.replace('_', ' ')
                headers = df_data.columns
+               st.markdown(f'<p style="font-family:sans-serif; font-size:15px">{analysis_str}</p>', unsafe_allow_html=True)
                st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
-               st.markdown(analysis_str)
+               #st.markdown(analysis_str)
             else:
                 st.markdown(df_str)
                 
@@ -255,7 +259,7 @@ if authenticate_user():
 
         try:
             output = fs_chain(str_input)
-            st.write(output['result'])
+            #st.write(output['result'])
             try:
                 # if the output doesn't work we will try one additional attempt to fix it
                 query_result = sf_query(output['result'])
