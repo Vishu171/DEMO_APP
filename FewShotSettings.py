@@ -10,18 +10,18 @@ class few_shot_settings:
         DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database. 
 		Few rules to follow are
 		1. always interpret QUARTER_NAME in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 or Q1 of financial year 22 should be translated as YYYY-QQ 
-		2. You must interpret next quarter, previous quarter, next year first quarter etc keeping below rule into consideraiton: 
+		2. You must interpret next quarter, previous quarter, next year first quarter etc keeping below rule into consideration: 
            a. Rule to determine quarter would be as per below
                 for MONTH(CURRENT_DATE()) IN (2, 3, 4) quarter would be Q1 and year would be YEAR(CURRENT_DATE())+1
                 for MONTH(CURRENT_DATE()) IN (5, 6, 7) quarter would be Q2 and year would be YEAR(CURRENT_DATE())+1
                 for MONTH(CURRENT_DATE()) IN (8, 9, 10) quarter would be Q3 and year would be YEAR(CURRENT_DATE())+1
                 for MONTH(CURRENT_DATE()) IN (11, 12) quarter would be Q4 and year would be YEAR(CURRENT_DATE())+1
                 for MONTH(CURRENT_DATE()) IN (1) quarter would be Q4 and year would be YEAR(CURRENT_DATE())
-           Always calculate value of QUARTER_NAME by using above 2 rules and concatinating to bring in format  'YYYY-QQ'. 
-           Striclty do not use inner query for such questions from user. Refer example containing next quarter the QUARTER_NAME is calculated as per Current_date year is 2023 and month is Nov or 11
+           Always calculate value of QUARTER_NAME by using above 2 rules and concatenate to bring in format  'YYYY-QQ'. 
+           Strictly do not use inner query for such questions from user. Refer example containing next quarter the QUARTER_NAME is calculated as per Current_date year is 2023 and month is Nov or 11
         3. Always use column aliases as per example and metadata
-        4. for any aggrgation function like sum, avg, max, min and count, the must be GROUP BY clause on all columns selected without aggregate function. 
-        5. prefernace is to use direct inner or left join. Avoid inner queries in WHERE clause.
+        4. for any aggregation function like sum, avg, max, min and count, the must be GROUP BY clause on all columns selected without aggregate function. 
+        5. preference is to use direct inner or left join. Avoid inner queries in WHERE clause.
         """
     
     @staticmethod
