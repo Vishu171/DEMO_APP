@@ -53,7 +53,7 @@ class few_shot_settings:
                 "sql_cmd": '''SELECT A.ITEM_WID AS "ITEM WID", to_varchar(A.AMOUNT, '$ 9,999,999,999.90') AS "AMOUNT" FROM FINANCIALS.MARVELL_DEMO.PROJECTED_INVENTORY A INNER JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON A.ITEM_WID = B.ITEM_WID WHERE B.BU = \'BBA\' AND A.QUARTER_NAME = \'2021-Q4\';''',
             },
             {
-                "input": "For a Particular BU , For Eg : CDSP Whats the actual vs Inhand vs Projected total amount for 5nm 'Tech Group' or 'technology group' in Year 2024 and Quarter Q3",
+                "input": "For a Particular BU , For Eg : CDSP What's the actual vs In hand vs Projected total amount for 5nm 'Tech Group' or 'technology group' in Year 2024 and Quarter Q3",
                 "sql_cmd": '''SELECT B.QUARTER_NAME AS "QUARTER NAME", A.BU AS "BU", A.TECHNOLOGY_GROUP AS "TECHNOLOGY GROUP", to_varchar(SUM(B.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL ACTUAL AMT",
                               to_varchar(SUM(C.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL ON-HAND AMT", to_varchar(SUM(PROJINV.AMOUNT), '$ 9,999,999,999.90') AS "TOTAL PROJECTED AMT" FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS A
                               LEFT JOIN FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS  B ON A.ITEM_WID  = B.ITEM_WID 
@@ -69,14 +69,14 @@ class few_shot_settings:
                               QUALIFY  ROW_NUMBER () OVER(ORDER BY "PROJECTED AMOUNT" DESC) =1;''',
             },
             {
-                "input": "whats the manufacturing comparison of type of items in q3 2024",
+                "input": "what's the manufacturing comparison of type of items in q3 2024",
                 "sql_cmd": '''SELECT B.QUARTER_NAME AS "QUARTER NAME", A.ITEM_TYPE AS "ITEM TYPE", to_varchar(SUM(B.AMOUNT), '$ 9,999,999,999.90') "TOTAL AMOUNT"
                               FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS A LEFT JOIN FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS B 
                               ON A.ITEM_WID  = B.ITEM_WID WHERE B.QUARTER_NAME = '2024-Q3' GROUP BY "QUARTER NAME", "ITEM TYPE" 
                               ORDER BY "TOTAL AMOUNT" DESC;''',
             },
             {
-                "input": "whats the manufacturing comparison on item's quantity of wafer group in q3 2024",
+                "input": "what's the manufacturing comparison on item's quantity of wafer group in q3 2024",
                 "sql_cmd": '''SELECT B.QUARTER_NAME AS "QUARTER NAME", B.ITEM_WID AS "ITEM WID", A.PRODUCT_GROUP AS "PRODUCT GROUP", SUM(B.QUANTITY) AS "TOTAL QUANTITY"
                               FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS A LEFT JOIN FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS B 
                               ON A.ITEM_WID  = B.ITEM_WID WHERE B.QUARTER_NAME = '2024-Q3' AND A.PRODUCT_GROUP='WFR' GROUP BY "PRODUCT GROUP", "QUARTER NAME", B.ITEM_WID, B.QUANTITY
@@ -102,7 +102,7 @@ class few_shot_settings:
                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ACTUALS GROUP BY QUARTER_NAME, TYPE''',
             },
             {
-                "input": "what is maximum and minimum projected invetory amount per quarter per type",
+                "input": "what is maximum and minimum projected inventory amount per quarter per type",
                 "sql_cmd": '''SELECT QUARTER_NAME AS "QUARTER NAME", TYPE AS "TYPE", to_varchar(max(AMOUNT), '$ 999,999,999.90') AS "MAX AMOUNT",
                            to_varchar(min(AMOUNT), '$ 999,999,999.90') AS "MIN AMOUNT" FROM FINANCIALS.MARVELL_DEMO.PROJECTED_INVENTORY GROUP BY QUARTER_NAME, TYPE;''',
             },
