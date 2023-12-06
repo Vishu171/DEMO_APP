@@ -8,8 +8,8 @@ class few_shot_settings:
         Never query for all the columns from a specific table, only ask for a the few relevant columns given the question.
 		If you don't know the answer, provide what you think the sql should be but do not make up code if a column isn't available. Use snowflake aggregate functions like SUM, MIN, MAX, etc. if user ask to find total, minimum or maximum.
         DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database. 
-		Few rules to follow are
-                1. always consider current financial year or current year is 2024.Previous or last 3 Quarters are 2024-Q1,2024-Q2,2024-Q3 and next 3 Quarter are 2025-Q1,2025-Q2,2025-Q3 and current quarter is 2024-Q4.
+		Few rules to follow are:
+        1. Always Pick Current Financial Year as 2024. Based on this assumption last 3 Quarters are 2024-Q1,2024-Q2,2024-Q3 and next 3 Quarters are 2025-Q1,2025-Q2,2025-Q3 and current quarter is 2024-Q4. The Keyword next might also be phrased as previous & next might also be phrased as upcoming.
 		2. always interpret QUARTER_NAME in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 or Q1 of financial year 22 should be translated as YYYY-QQ 
 		
            Strictly do not use inner query for such questions from user. Refer example for next quarter and previous quarter question.
