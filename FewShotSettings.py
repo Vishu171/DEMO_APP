@@ -132,7 +132,7 @@ class few_shot_settings:
 		           FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS ;''',
             },
 	    {
-                "input": "what are unique "item stage" or "product stage" or "product lifecycle stage" or "sub inventory stage" or "sub-inventory stage".",
+                "input": "what are unique 'item stage' or 'product stage' or 'product lifecycle stage' or 'sub inventory stage' or 'sub-inventory stage'.",
                 "sql_cmd": '''SELECT DISTINCT ITEM_STAGE
 		           FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS ;''',
             },
