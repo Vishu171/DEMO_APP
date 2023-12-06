@@ -9,7 +9,7 @@ class few_shot_settings:
 		If you don't know the answer, provide what you think the sql should be but do not make up code if a column isn't available. Use snowflake aggregate functions like SUM, MIN, MAX, etc. if user ask to find total, minimum or maximum.
         DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database. 
 		Few rules to follow are
-                1. always consider current financial year or current year =  YEAR(CURRENT_DATE())+1.
+                1. always consider current financial year or current year is 2024.Previous or last 3 Quarters are 2024-Q1,2024-Q2,2024-Q3 and next 3 Quarter are 2025-Q1,2025-Q2,2025-Q3 and current quarter is 2024-Q4.
 		2. always interpret QUARTER_NAME in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 or Q1 of financial year 22 should be translated as YYYY-QQ 
 		
            Strictly do not use inner query for such questions from user. Refer example for next quarter and previous quarter question.
@@ -103,34 +103,12 @@ class few_shot_settings:
             {
                 "input": "what is inventory on hand for next 2 quarters for the business unit Switch.",
                 "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
-                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME IN (CASE 
-				WHEN MONTH(CURRENT_DATE()) IN (2, 3, 4) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 2))
-				WHEN MONTH(CURRENT_DATE()) IN (5, 6, 7) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 3))
-				WHEN MONTH(CURRENT_DATE()) IN (8, 9, 10) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 4))
-				WHEN MONTH(CURRENT_DATE()) IN (11, 12) THEN CONCAT(YEAR(CURRENT_DATE())+2, CONCAT('-Q', 1)) 
-				WHEN MONTH(CURRENT_DATE()) IN (1) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 1)) END,
-				CASE 
-				WHEN MONTH(CURRENT_DATE()) IN (2, 3, 4) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 3))
-				WHEN MONTH(CURRENT_DATE()) IN (5, 6, 7) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 4))
-				WHEN MONTH(CURRENT_DATE()) IN (8, 9, 10) THEN CONCAT(YEAR(CURRENT_DATE())+2, CONCAT('-Q', 1))
-				WHEN MONTH(CURRENT_DATE()) IN (11, 12) THEN CONCAT(YEAR(CURRENT_DATE())+2, CONCAT('-Q', 2)) 
-				WHEN MONTH(CURRENT_DATE()) IN (1) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 2)) END);''',
+                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME IN ('2025-Q1','2025-Q2');''',
             },
             {
                 "input": "what is inventory on hand for previous 2 quarters for the business unit Switch.",
                 "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
-                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME IN (CASE
-				WHEN MONTH(CURRENT_DATE()) IN (2, 3, 4) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 4))
-				WHEN MONTH(CURRENT_DATE()) IN (5, 6, 7) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 1))
-				WHEN MONTH(CURRENT_DATE()) IN (8, 9, 10) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 2))
-				WHEN MONTH(CURRENT_DATE()) IN (11, 12) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 3)) 
-				WHEN MONTH(CURRENT_DATE()) IN (1) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 3)) END,
-				CASE 
-				WHEN MONTH(CURRENT_DATE()) IN (2, 3, 4) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 3))
-				WHEN MONTH(CURRENT_DATE()) IN (5, 6, 7) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 4))
-				WHEN MONTH(CURRENT_DATE()) IN (8, 9, 10) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 1))
-				WHEN MONTH(CURRENT_DATE()) IN (11, 12) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 2)) 
-				WHEN MONTH(CURRENT_DATE()) IN (1) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 2)) END);''',
+                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME IN ('2024-Q3','2024-Q2');''',
             },      
 	    {
                 "input": "what is inventory on hand for current quarter for the business unit Switch.",
@@ -160,12 +138,7 @@ class few_shot_settings:
 	    {
                 "input": "what is inventory on hand for last or previous quarter for the business unit Switch.",
                 "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
-                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME = CASE 
-				WHEN MONTH(CURRENT_DATE()) IN (2, 3, 4) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 4))
-				WHEN MONTH(CURRENT_DATE()) IN (5, 6, 7) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 1))
-				WHEN MONTH(CURRENT_DATE()) IN (8, 9, 10) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 2))
-				WHEN MONTH(CURRENT_DATE()) IN (11, 12) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 3)) 
-				WHEN MONTH(CURRENT_DATE()) IN (1) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 3)) END AND
+                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME = '2024-Q3'  AND
                                 B.BU = 'Switch';''',
             },
         ]
