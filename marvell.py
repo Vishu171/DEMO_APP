@@ -151,7 +151,7 @@ def output_operation(query_result,str_input):
             analysis = fs_analysis(df_analysis,str_input)                    
             headers = df_2.columns
             st.markdown(f'<p style="font-family:sans-serif; font-size:15px">{analysis}</p>', unsafe_allow_html=True)
-            with st.expander("The Result:"):
+            with st.expander("Table Output:"):
                st.markdown(tabulate(df_2, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
             #st.markdown(analysis)
             st.text("")
@@ -250,7 +250,8 @@ if authenticate_user():
                df_data.columns = df_data.columns.str.replace('_', ' ')
                headers = df_data.columns
                st.markdown(f'<p style="font-family:sans-serif; font-size:15px">{analysis_str}</p>', unsafe_allow_html=True)
-               st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
+               with st.expander("Table Output:"):
+                  st.markdown(tabulate(df_data, tablefmt="html",headers=headers,showindex=False), unsafe_allow_html = True) 
                #st.markdown(analysis_str)
             else:
                 st.markdown(df_str)
