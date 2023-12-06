@@ -115,10 +115,36 @@ class few_shot_settings:
                 "input": "what is inventory on hand for previous 2 quarters for the business unit Switch.",
                 "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
                             FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME IN ('2024-Q3','2024-Q2');''',
-            },            {
+            },      
+	    {
                 "input": "what is inventory on hand for current quarter for the business unit Switch.",
                 "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
                             FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME = '2024-Q4';''',
+            },
+	    {
+                "input": "what all are qualified manufacturing sources or manufacturing sources.",
+                "sql_cmd": '''SELECT DISTINCT FAB_HOUSE 
+		           FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS ;''',
+            },
+	    {
+                "input": "what all are manufacturing geography or manufacturing product geography.",
+                "sql_cmd": '''SELECT DISTINCT DESIGN_COUNTRY
+		           FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS ;''',
+            },
+	    {
+                "input": "what are unique "item stage" or "product stage" or "product lifecycle stage" or "sub inventory stage" or "sub-inventory stage".",
+                "sql_cmd": '''SELECT DISTINCT ITEM_STAGE
+		           FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS ;''',
+            },
+	    {
+                "input": "which BU NPI or New Product Introduction and FG or finished good and FIN Stages belong to.",
+                "sql_cmd": '''SELECT BU 
+		           FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS WHERE ITEM_TYPE IN ('NPI','FG','FIN');''',
+            },
+	    {
+                "input": "what is inventory on hand for last quarter for the business unit Switch.",
+                "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
+                            FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME = '2024-Q3';''',
             },
         ]
         return examples
