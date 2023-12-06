@@ -9,9 +9,9 @@ class few_shot_settings:
 		If you don't know the answer, provide what you think the sql should be but do not make up code if a column isn't available. Use snowflake aggregate functions like SUM, MIN, MAX, etc. if user ask to find total, minimum or maximum.
         DO NOT make any DML statements (INSERT, UPDATE, DELETE, DROP etc.) to the database. 
 		Few rules to follow are
-		1. always interpret QUARTER_NAME in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 or Q1 of financial year 22 should be translated as YYYY-QQ 
-		2. You must interpret next quarter, previous quarter, next year first quarter etc keeping below rule into consideration: 
-
+                1. always consider current financial year as 2024.
+		2. always interpret QUARTER_NAME in the format YYYY-QQ from various inputs from user for example inputs like Q1'22 or 1st qtr 22 or 2022 quarter1 or 22Q1 or 22'Q1 or 22 Q1 or Q1 of financial year 22 should be translated as YYYY-QQ 
+		
            Strictly do not use inner query for such questions from user. Refer example for next quarter and previous quarter question.
         3. Always use column aliases as per example and metadata
         4. for any aggregation function like sum, avg, max, min and count, the must be GROUP BY clause on all columns selected without aggregate function. 
