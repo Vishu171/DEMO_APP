@@ -158,14 +158,15 @@ class few_shot_settings:
 		           FROM FINANCIALS.MARVELL_DEMO.ITEM_DETAILS WHERE ITEM_TYPE IN ('NPI','FG','FIN');''',
             },
 	    {
-                "input": "what is inventory on hand for last quarter for the business unit Switch.",
+                "input": "what is inventory on hand for last or previous quarter for the business unit Switch.",
                 "sql_cmd": '''SELECT A.QUARTER_NAME AS "QUARTER NAME", B.BU AS "BU", to_varchar(A.AMOUNT, '$ 999,999,999.90') AS "ON-HAND INVENTORY AMOUNT"
                             FROM FINANCIALS.MARVELL_DEMO.INVENTORY_ON_HANDS A LEFT JOIN FINANCIALS.MARVELL_DEMO.ITEM_DETAILS B ON B.ITEM_WID = A.ITEM_WID WHERE A.QUARTER_NAME = CASE 
 				WHEN MONTH(CURRENT_DATE()) IN (2, 3, 4) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 4))
 				WHEN MONTH(CURRENT_DATE()) IN (5, 6, 7) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 1))
 				WHEN MONTH(CURRENT_DATE()) IN (8, 9, 10) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 2))
 				WHEN MONTH(CURRENT_DATE()) IN (11, 12) THEN CONCAT(YEAR(CURRENT_DATE())+1, CONCAT('-Q', 3)) 
-				WHEN MONTH(CURRENT_DATE()) IN (1) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 3)) END;''',
+				WHEN MONTH(CURRENT_DATE()) IN (1) THEN CONCAT(YEAR(CURRENT_DATE()), CONCAT('-Q', 3)) END AND
+                                B.BU = 'Switch';''',
             },
         ]
         return examples
