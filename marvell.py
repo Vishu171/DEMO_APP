@@ -162,7 +162,8 @@ def output_operation(query_result,str_input):
         with st.chat_message("assistant"):
             err_msg = "Data for the provided question is not available. Please try to improve your question."
             st.markdown(err_msg)
-            st.write(output['result'])
+            with st.expander("The SQL query used for above question is:"):
+              st.write(output['result'])
             st.session_state.messages.append({"role": "assistant", "content": err_msg})
     
 st.set_page_config(layout="wide")
