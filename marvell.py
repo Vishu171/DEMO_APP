@@ -80,8 +80,8 @@ class zero_shot_analyze_utility:
         
 llm = ChatOpenAI(
     model_name="gpt-4",
-    temperature=0.1,
-    max_tokens=1000,
+    temperature=0,
+    max_tokens=2000,
     openai_api_key= st.secrets["openai_key"]
 )
 
