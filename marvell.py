@@ -167,7 +167,7 @@ def output_operation(query_result,str_input):
             with st.expander("The SQL query used for above question is:"):
               st.write(output['result'])
             st.session_state.messages.append({"role": "assistant", "content": err_msg})
-            raise Exception("second try")
+        raise Exception("second try")
     
 st.set_page_config(layout="wide")
 
