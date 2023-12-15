@@ -160,6 +160,7 @@ def output_operation(query_result,str_input):
         data = df_2.to_csv(sep=',', index=False) + "<separator>" + analysis
         st.session_state.messages.append({"role": "assistant", "content": data})
     else:
+        raise Exception("second try")
         with st.chat_message("assistant"):
             err_msg = "Data for the provided question is not available. Please try to improve your question."
             st.markdown(err_msg)
